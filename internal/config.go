@@ -15,10 +15,10 @@ const (
 
 // Config holds options that can be set via ~/.crusoe/config and env variables.
 type Config struct {
-	AccessKey  string `toml:"access_key_id"`
-	SecretKey  string `toml:"secret_key"`
-	SSHKeyFile string `toml:"ssh_public_key_file"`
-	Endpoint   string `toml:"api_endpoint"`
+	AccessKeyID      string `toml:"access_key_id"`
+	SecretKey        string `toml:"secret_key"`
+	SSHPublicKeyFile string `toml:"ssh_public_key_file"`
+	ApiEndpoint      string `toml:"api_endpoint"`
 }
 
 // ConfigFile reflects the structure of a valid Crusoe config, which should have a default profile at the root level.
@@ -31,7 +31,7 @@ type ConfigFile struct {
 // TODO: add support
 func GetConfig() (*Config, error) {
 	config := Config{
-		Endpoint: defaultApiEndpoint,
+		ApiEndpoint: defaultApiEndpoint,
 	}
 
 	// Parse config file
@@ -45,12 +45,12 @@ func GetConfig() (*Config, error) {
 	var configFile ConfigFile
 	_, err = toml.DecodeFile(configPath, &configFile)
 	if err == nil { // just skip if error - not having a config file is valid
-		config.AccessKey = configFile.Default.AccessKey
+		config.AccessKeyID = configFile.Default.AccessKeyID
 		config.SecretKey = configFile.Default.SecretKey
-		config.SSHKeyFile = configFile.Default.SSHKeyFile
+		config.SSHPublicKeyFile = configFile.Default.SSHPublicKeyFile
 
-		if configFile.Default.Endpoint != "" {
-			config.Endpoint = configFile.Default.Endpoint
+		if configFile.Default.ApiEndpoint != "" {
+			config.ApiEndpoint = configFile.Default.ApiEndpoint
 		}
 	}
 
@@ -60,13 +60,13 @@ func GetConfig() (*Config, error) {
 	apiEndpoint := os.Getenv("CRUSOE_API_ENDPOINT")
 
 	if accessKey != "" {
-		config.AccessKey = accessKey
+		config.AccessKeyID = accessKey
 	}
 	if secretKey != "" {
 		config.SecretKey = secretKey
 	}
 	if apiEndpoint != "" {
-		config.Endpoint = apiEndpoint
+		config.ApiEndpoint = apiEndpoint
 	}
 
 	return &config, nil

@@ -78,7 +78,7 @@ func (p *crusoeProvider) Configure(ctx context.Context, req provider.ConfigureRe
 				" read your home directory.\n\nWarning: %s", err.Error()))
 	}
 
-	if clientConfig.AccessKey == "" {
+	if clientConfig.AccessKeyID == "" {
 		resp.Diagnostics.AddAttributeError(
 			path.Root("access_key"),
 			"Missing Crusoe API Key",
@@ -103,7 +103,7 @@ func (p *crusoeProvider) Configure(ctx context.Context, req provider.ConfigureRe
 	}
 
 	// Create an API client and make it available during DataSource and Resource type Configure methods.
-	client := internal.NewAPIClient(clientConfig.Endpoint, clientConfig.AccessKey, clientConfig.SecretKey)
+	client := internal.NewAPIClient(clientConfig.ApiEndpoint, clientConfig.AccessKeyID, clientConfig.SecretKey)
 	resp.DataSourceData = client
 	resp.ResourceData = client
 }
